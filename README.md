@@ -1,1 +1,3 @@
-# Rest API with typescript + mongo - starter files
+# Screenshot of passing tests
+
+![Screenshot](./screenshot.png)

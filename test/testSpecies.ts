@@ -1,8 +1,8 @@
-import {Polygon} from 'geojson';
-import {MessageResponse} from '../src/types/Messages';
-import {Express} from 'express';
-import request from 'supertest';
-import {PostSpecies, TestSpecies} from './testTypes';
+import { Polygon } from "geojson";
+import { MessageResponse } from "../src/types/Messages";
+import { Express } from "express";
+import request from "supertest";
+import { PostSpecies, TestSpecies } from "./testTypes";
 
 // TODO: Add tests for the following:
 // 1. Get all species
@@ -19,7 +19,7 @@ type DBMessageResponse = MessageResponse & {
 const getSpecies = (app: Express): Promise<TestSpecies[]> => {
   return new Promise((resolve, reject) => {
     request(app)
-      .get('/api/v1/species')
+      .get("/api/v1/species")
       .expect(200, (err, response) => {
         if (err) {
           reject(err);
@@ -29,7 +29,7 @@ const getSpecies = (app: Express): Promise<TestSpecies[]> => {
             expect(species._id).toBeDefined();
             expect(species.species_name).toBeDefined();
             expect(species.category).toBeDefined();
-            expect(species.location.type).toBe('Point');
+            expect(species.location.type).toBe("Point");
             expect(species.location.coordinates).toHaveLength(2);
           });
           resolve(species);
@@ -50,7 +50,7 @@ const getSpeciesById = (app: Express, id: string): Promise<TestSpecies> => {
           expect(species._id).toBeDefined();
           expect(species.species_name).toBeDefined();
           expect(species.category).toBeDefined();
-          expect(species.location.type).toBe('Point');
+          expect(species.location.type).toBe("Point");
           expect(species.location.coordinates).toHaveLength(2);
           resolve(species);
         }
@@ -60,21 +60,19 @@ const getSpeciesById = (app: Express, id: string): Promise<TestSpecies> => {
 
 const postSpecies = (
   app: Express,
-  speciesData: PostSpecies,
+  speciesData: PostSpecies
 ): Promise<DBMessageResponse> => {
   return new Promise((resolve, reject) => {
-    console.log('lolz', speciesData);
     request(app)
-      .post('/api/v1/species')
+      .post("/api/v1/species")
       .send(speciesData)
       .expect(201, (err, response) => {
         if (err) {
           reject(err);
         } else {
-          console.log('kakka', response.body);
           const message: string = response.body.message;
           const data = response.body.data as TestSpecies;
-          expect(message).toBe('Species created');
+          expect(message).toBe("Species created");
           expect(data._id).toBeDefined();
           expect(data.species_name).toBe(speciesData.species_name);
           expect(data.category).toBe(speciesData.category);
@@ -89,19 +87,19 @@ const putSpecies = (
   app: Express,
   id: string,
   species_name: string,
-  location: {type: string; coordinates: number[]},
+  location: { type: string; coordinates: number[] }
 ): Promise<DBMessageResponse> => {
   return new Promise((resolve, reject) => {
     request(app)
       .put(`/api/v1/species/${id}`)
-      .send({species_name, location})
+      .send({ species_name, location })
       .expect(200, (err, response) => {
         if (err) {
           reject(err);
         } else {
           const message: string = response.body.message;
           const data = response.body.data as TestSpecies;
-          expect(message).toBe('Species updated');
+          expect(message).toBe("Species updated");
           expect(data._id).toBeDefined();
           expect(data.species_name).toBe(species_name);
           expect(data.location).toStrictEqual(location);
@@ -113,7 +111,7 @@ const putSpecies = (
 
 const deleteSpecies = (
   app: Express,
-  id: string,
+  id: string
 ): Promise<DBMessageResponse> => {
   return new Promise((resolve, reject) => {
     request(app)
@@ -123,7 +121,7 @@ const deleteSpecies = (
           reject(err);
         } else {
           const message: string = response.body.message;
-          expect(message).toBe('Species deleted');
+          expect(message).toBe("Species deleted");
           resolve(response.body);
         }
       });
@@ -132,12 +130,12 @@ const deleteSpecies = (
 
 const getSpeciesByArea = (
   app: Express,
-  polygon: Polygon,
+  polygon: Polygon
 ): Promise<TestSpecies[]> => {
   return new Promise((resolve, reject) => {
     request(app)
       .post(`/api/v1/species/area`)
-      .send({polygon})
+      .send({ polygon })
       .expect(200, (err, response) => {
         if (err) {
           reject(err);
@@ -147,7 +145,7 @@ const getSpeciesByArea = (
             expect(species._id).toBeDefined();
             expect(species.species_name).toBeDefined();
             expect(species.category).toBeDefined();
-            expect(species.location.type).toBe('Point');
+            expect(species.location.type).toBe("Point");
             expect(species.location.coordinates).toHaveLength(2);
           });
           resolve(species);
