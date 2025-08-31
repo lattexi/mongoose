@@ -1,3 +1,3 @@
 # Screenshot of passing tests
 
-![Screenshot](./screenshot.png)
+![Screenshot.png](Screenshot.png)
